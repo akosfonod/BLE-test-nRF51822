@@ -1,3 +1,4 @@
+//Platformio installation:  https://docs.platformio.org/en/latest/core/installation.html#piocore-install-shell-commands
 //Waveshare_BLE400 pio doc: https://docs.platformio.org/en/latest/boards/nordicnrf51/waveshare_ble400.html
 //nRF51822 platform doc:    https://docs.platformio.org/en/latest/platforms/nordicnrf51.html#platform-nordicnrf51
 //nRF51922 lib doc:         https://platformio.org/lib/show/2587/nRF51822
@@ -6,6 +7,9 @@
 //stlink debugging:         https://docs.platformio.org/en/latest/plus/debug-tools/stlink.html
 //BlackMagicProbe debugging:https://docs.platformio.org/en/latest/plus/debug-tools/blackmagic.html
 //Unit testing on HW:       https://docs.platformio.org/en/latest/plus/unit-testing.html
+
+//DEBUG BUILD:    platformio run -e BLE400 -t debug -v -j8
+//RELEASE BUILD:  platformio run -e BLE400  -v -j8
 
 /*
  * Blink
@@ -17,6 +21,9 @@
 
 #define LED 20
 
+#ifdef __PLATFORMIO_BUILD_DEBUG__
+    unsigned int counter = 0;
+#endif
 void setup()
 {
   // initialize LED digital pin as an output.
@@ -33,5 +40,9 @@ void loop()
   digitalWrite(LED, LOW);
    // wait for a second
   delay(1000);
+
+  #ifdef __PLATFORMIO_BUILD_DEBUG__
+    counter++;
+  #endif
 }
 
