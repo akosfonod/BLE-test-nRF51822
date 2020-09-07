@@ -20,14 +20,26 @@
 #include <Arduino.h>
 
 #define LED 20
+#define STATUS_LED 22
+#define BAUD 115200
 
 #ifdef __PLATFORMIO_BUILD_DEBUG__
     unsigned int counter = 0;
 #endif
+
 void setup()
 {
   // initialize LED digital pin as an output.
+  pinMode(STATUS_LED, OUTPUT);
+  digitalWrite(STATUS_LED, HIGH);
+
   pinMode(LED, OUTPUT);
+  #ifdef __PLATFORMIO_BUILD_DEBUG__
+    Serial.begin(BAUD);
+    while (!Serial){;}
+  #endif
+
+  digitalWrite(STATUS_LED, LOW);
 }
 
 void loop()
@@ -43,6 +55,7 @@ void loop()
 
   #ifdef __PLATFORMIO_BUILD_DEBUG__
     counter++;
+    Serial.print("Counter value: "); Serial.println(counter);
   #endif
 }
 
