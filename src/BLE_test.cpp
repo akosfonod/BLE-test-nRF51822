@@ -6,22 +6,21 @@
 #include <SPI.h>
 #include <BLEPeripheral.h>
 
-// define pins (varies per shield/board)
-#define BLE_REQ   10
-#define BLE_RDY   2
-#define BLE_RST   9
+#define UUID_end "e8f2537e4f6cd104768a1214"
+#define UUID0 "19b10000" UUID_end
+#define UUID1 "19b10001" UUID_end
 
 // LED pin
 #define LED_PIN   20
 
 // create peripheral instance, see pinouts above
-BLEPeripheral            blePeripheral        = BLEPeripheral(BLE_REQ, BLE_RDY, BLE_RST);
+BLEPeripheral            blePeripheral        = BLEPeripheral();
 
 // create service
-BLEService               ledService           = BLEService("19b10000e8f2537e4f6cd104768a1214");
+BLEService               ledService           = BLEService(UUID0);
 
 // create switch characteristic
-BLECharCharacteristic    switchCharacteristic = BLECharCharacteristic("19b10001e8f2537e4f6cd104768a1214", BLERead | BLEWrite);
+BLECharCharacteristic    switchCharacteristic = BLECharCharacteristic(UUID1, BLERead | BLEWrite);
 
 void setup() {
     Serial.begin(9600);
