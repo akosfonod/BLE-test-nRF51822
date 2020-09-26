@@ -14,6 +14,8 @@
 // LED pin
 #define LED_PIN   20
 
+const char* commit_ID = GIT_VERSION;
+
 // create peripheral instance, see pinouts above
 BLEPeripheral            blePeripheral        = BLEPeripheral();
 
