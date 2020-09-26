@@ -5,6 +5,7 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <BLEPeripheral.h>
+#include "git-version.h"
 
 #define UUID_end "e8f2537e4f6cd104768a1214"
 #define UUID0 "19b10000" UUID_end
