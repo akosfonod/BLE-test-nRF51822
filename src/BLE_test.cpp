@@ -16,7 +16,7 @@
 
 #define VERSION "V0.0.0"
 const char* commit_ID = GIT_COMMIT_ID;
-#pragma message ("TIME: " __DATE__ " " __TIME__ " Version: " VERSION " COMMIT_ID: " GIT_COMMIT_ID " ")
+#pragma message ("TIME: " __DATE__ " " __TIME__ " Version: " VERSION )
 
 // create peripheral instance, see pinouts above
 BLEPeripheral            blePeripheral        = BLEPeripheral();
