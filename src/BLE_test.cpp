@@ -46,6 +46,7 @@ void setup() {
     blePeripheral.begin();
 
     Serial.println(F("BLE LED Peripheral"));
+    Serial.println(F(commit_ID));
 }
 
 void loop() {
