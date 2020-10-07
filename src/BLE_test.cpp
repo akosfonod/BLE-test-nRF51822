@@ -5,6 +5,8 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <BLEPeripheral.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 #include "git-version.h"
 
 #define UUID_end "e8f2537e4f6cd104768a1214"
@@ -12,7 +14,8 @@
 #define UUID1 "19b10001" UUID_end
 
 // LED pin
-#define LED_PIN   20
+#define LED_PIN         20  //P0.20     LED2
+#define ONE_WIRE_BUS    0   //P0.00     SDA
 
 #define VERSION "V0.0.0"
 const char* commit_ID = GIT_COMMIT_ID;
@@ -27,12 +30,27 @@ BLEService               ledService           = BLEService(UUID0);
 // create switch characteristic
 BLECharCharacteristic    switchCharacteristic = BLECharCharacteristic(UUID1, BLERead | BLEWrite);
 
+OneWire oneWire(ONE_WIRE_BUS);
+DallasTemperature sensors(&oneWire);
+
+int numberOfDevices; // Number of temperature devices found
+
 void setup() {
     Serial.begin(9600);
     while (!Serial){;}
+    nrf_gpio_cfg_input(ONE_WIRE_BUS, NRF_GPIO_PIN_NOPULL);
+    sensors.begin();
 
     // set LED pin to output mode
     pinMode(LED_PIN, OUTPUT);
+
+    numberOfDevices = sensors.getDeviceCount();
+    Serial.print("Found ");
+    Serial.print(numberOfDevices, DEC);
+    Serial.println(" devices.");
+    Serial.print("Parasite power is: "); 
+    if (sensors.isParasitePowerMode()) Serial.println("ON");
+    else Serial.println("OFF");
 
     // set advertised local name and service UUID
     blePeripheral.setLocalName("LED");
@@ -68,6 +86,8 @@ void loop() {
             Serial.println(F("LED off"));
             digitalWrite(LED_PIN, LOW);
             }
+            sensors.requestTemperatures();
+            Serial.println("Temperature: " + String(sensors.getTempCByIndex(0)));
         }
         }
 
