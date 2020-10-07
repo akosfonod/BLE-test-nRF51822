@@ -38,7 +38,6 @@ int numberOfDevices; // Number of temperature devices found
 void setup() {
     Serial.begin(9600);
     while (!Serial){;}
-    nrf_gpio_cfg_input(ONE_WIRE_BUS, NRF_GPIO_PIN_NOPULL);
     sensors.begin();
 
     // set LED pin to output mode
