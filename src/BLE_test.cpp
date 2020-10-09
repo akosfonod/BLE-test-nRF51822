@@ -12,10 +12,16 @@
 #define UUID_end "e8f2537e4f6cd104768a1214"
 #define UUID0 "19b10000" UUID_end
 #define UUID1 "19b10001" UUID_end
+#define UUID2 "19b10002" UUID_end
+#define UUID3 "19b10003" UUID_end
+#define UUID4 "19b10004" UUID_end
 
 // LED pin
 #define LED_PIN         20  //P0.20     LED2
 #define ONE_WIRE_BUS    0   //P0.00     SDA
+
+#define BAUD 9600
+#define DEVICE_NAME "BLE_LED"
 
 #define VERSION "V0.0.0"
 const char* commit_ID = GIT_COMMIT_ID;
@@ -26,17 +32,24 @@ BLEPeripheral            blePeripheral        = BLEPeripheral();
 
 // create service
 BLEService               ledService           = BLEService(UUID0);
+BLEService               temperatureService   = BLEService(UUID2);
 
-// create switch characteristic
-BLECharCharacteristic    switchCharacteristic = BLECharCharacteristic(UUID1, BLERead | BLEWrite);
+// create characteristics
+BLECharCharacteristic    switchCharacteristic       = BLECharCharacteristic(UUID1, BLERead | BLEWrite);
+BLEFloatCharacteristic   temperatureCharacteristic  = BLEFloatCharacteristic(UUID3, BLERead);
+
+// reacet descriptors
+BLEDescriptor temperatureDescriptor = BLEDescriptor(UUID4,"Temp Celsius");
+
 
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 
 int numberOfDevices; // Number of temperature devices found
+float tempValue=0;
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(BAUD);
     while (!Serial){;}
     sensors.begin();
 
@@ -53,11 +66,16 @@ void setup() {
 
     // set advertised local name and service UUID
     blePeripheral.setLocalName("LED");
+    blePeripheral.setDeviceName(DEVICE_NAME);
     blePeripheral.setAdvertisedServiceUuid(ledService.uuid());
+    blePeripheral.setAdvertisedServiceUuid(temperatureService.uuid());
 
     // add service and characteristic
     blePeripheral.addAttribute(ledService);
     blePeripheral.addAttribute(switchCharacteristic);
+    blePeripheral.addAttribute(temperatureService);
+    blePeripheral.addAttribute(temperatureCharacteristic);
+    blePeripheral.addAttribute(temperatureDescriptor);
 
     // begin initialization
     blePeripheral.begin();
@@ -86,7 +104,9 @@ void loop() {
             digitalWrite(LED_PIN, LOW);
             }
             sensors.requestTemperatures();
-            Serial.println("Temperature: " + String(sensors.getTempCByIndex(0)));
+            tempValue = sensors.getTempCByIndex(0);
+            Serial.println("Temperature: " + String(tempValue) + "\t" + tempValue);
+            temperatureCharacteristic.setValue(tempValue);
         }
         }
 
