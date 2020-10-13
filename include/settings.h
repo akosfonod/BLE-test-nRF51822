@@ -15,3 +15,4 @@
 #define UUID2 "19b10002" UUID_end
 #define UUID3 "19b10003" UUID_end
 #define UUID4 "19b10004" UUID_end
+#define UUID5 "19b10005" UUID_end

@@ -21,8 +21,9 @@ BLEService               ledService           = BLEService(UUID0);
 BLEService               temperatureService   = BLEService(UUID2);
 
 // create characteristics
-BLECharCharacteristic    switchCharacteristic       = BLECharCharacteristic(UUID1, BLERead | BLEWrite);
-BLEFloatCharacteristic   temperatureCharacteristic  = BLEFloatCharacteristic(UUID3, BLERead);
+BLECharCharacteristic    switchCharacteristic               = BLECharCharacteristic(UUID1, BLERead | BLEWrite);
+BLEFloatCharacteristic   temperatureCharacteristic          = BLEFloatCharacteristic(UUID3, BLERead);
+BLEFloatCharacteristic   temperatureNotifyCharacteristic    = BLEFloatCharacteristic(UUID5, BLENotify);
 
 // reacet descriptors
 BLEDescriptor temperatureDescriptor = BLEDescriptor(UUID4,"Temp Celsius");
@@ -33,6 +34,7 @@ DallasTemperature sensors(&oneWire);
 
 int numberOfDevices; // Number of temperature devices found
 float tempValue=0;
+char* temperature=0;
 
 void setup() {
     Serial.begin(BAUD);
@@ -62,6 +64,7 @@ void setup() {
     blePeripheral.addAttribute(temperatureService);
     blePeripheral.addAttribute(temperatureCharacteristic);
     blePeripheral.addAttribute(temperatureDescriptor);
+    blePeripheral.addAttribute(temperatureNotifyCharacteristic);
 
     // begin initialization
     blePeripheral.begin();
@@ -91,8 +94,9 @@ void loop() {
             }
             sensors.requestTemperatures();
             tempValue = sensors.getTempCByIndex(0);
-            Serial.println("Temperature: " + String(tempValue) + "\t" + tempValue);
+            Serial.println("Temperature: " + String(tempValue));
             temperatureCharacteristic.setValue(tempValue);
+            temperatureNotifyCharacteristic.setValue(tempValue);
         }
         }
 
