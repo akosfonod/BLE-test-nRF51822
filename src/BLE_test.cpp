@@ -36,6 +36,10 @@ int numberOfDevices; // Number of temperature devices found
 float tempValue=0;
 char* temperature=0;
 
+#ifdef __PLATFORMIO_BUILD_DEBUG__
+    unsigned int counter = 0;
+#endif
+
 void setup() {
     Serial.begin(BAUD);
     while (!Serial){;}
@@ -84,6 +88,10 @@ void loop() {
         while (central.connected()) {
         // central still connected to peripheral
         if (switchCharacteristic.written()) {
+            #ifdef __PLATFORMIO_BUILD_DEBUG__
+                counter ++;
+            #endif
+
             // central wrote new value to characteristic, update LED
             if (switchCharacteristic.value()) {
             Serial.println(F("LED on"));

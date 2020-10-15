@@ -22,7 +22,9 @@ void test_tempsensor_pin_number(void) {
 }
 
 void test_tempsensor_presence(void) {
-    TEST_ASSERT_GREATER_OR_EQUAL_INT(1, sensors.getDeviceCount());
+    int device_amount = sensors.getDeviceCount();
+    Serial.println("Amount of detected device(s): " + String(device_amount));
+    TEST_ASSERT_GREATER_OR_EQUAL_INT(1, device_amount);
 }
 
 void test_tempsensor_value(void) {
