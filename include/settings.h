@@ -1,5 +1,3 @@
-#define VERSION "V0.0.0"
-
 //BLE NAME
 #define DEVICE_NAME "BLE_LED"
 

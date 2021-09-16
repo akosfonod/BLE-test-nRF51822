@@ -10,8 +10,8 @@
 #include "git-version.h"
 #include "settings.h"
 
-const char* __attribute__((used)) commit_ID = GIT_COMMIT_ID;
-#pragma message ("TIME: " __DATE__ " " __TIME__ " Version: " VERSION )
+const char* __attribute__((used,section(".COMMIT.__at_0x1b100"))) commit_ID = GIT_COMMIT_ID;
+#pragma message ("TIME: " __DATE__ " " __TIME__ )
 
 // create peripheral instance, see pinouts above
 BLEPeripheral            blePeripheral        = BLEPeripheral();
