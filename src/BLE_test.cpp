@@ -10,7 +10,7 @@
 #include "git-version.h"
 #include "settings.h"
 
-const unsigned char* __attribute__((used,section(".COMMIT"))) commit_ID = reinterpret_cast <const unsigned char *> (GIT_COMMIT_ID);
+const char __attribute__((used, section(".COMMIT"), aligned(4))) commit_ID[14]  = GIT_COMMIT_ID;
 #pragma message ("TIME: " __DATE__ " " __TIME__ )
 
 // create peripheral instance, see pinouts above
